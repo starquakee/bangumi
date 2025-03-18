@@ -7,7 +7,7 @@ import pandas as pd
 from datetime import datetime
 import os
 
-# 请求头，模拟浏览器访问
+# 设置请求头，模拟浏览器访问
 headers = {
     'User-Agent': ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
                    'AppleWebKit/537.36 (KHTML, like Gecko) '
@@ -20,6 +20,7 @@ num_pages = 380  # 可根据需要调整页数
 # 用于存储所有详情页链接，保持顺序
 all_subject_urls = []
 
+# 遍历每一页
 for page in range(1, num_pages + 1):
     # 构造分页URL
     if page == 1:
@@ -37,7 +38,7 @@ for page in range(1, num_pages + 1):
     response.encoding = 'utf-8'
     soup = BeautifulSoup(response.text, 'html.parser')
 
-    # 提取所有详情页链接（按出现顺序），避免重复
+    # 按出现顺序提取详情页链接，避免重复
     for a in soup.find_all('a', href=re.compile(r'^/subject/\d+')):
         link = a['href']
         if link not in all_subject_urls:
@@ -61,12 +62,14 @@ for ranking, url in enumerate(subject_urls, start=1):
         subject_soup = BeautifulSoup(r.text, 'html.parser')
         air_date = None
 
-        # 方法1：查找包含关键词的 <li> 标签
+        # 方法1：查找包含关键词的 <li> 标签（可能包含上映、首播等信息）
         li_tag = subject_soup.find(lambda tag: tag.name == "li" and any(
             keyword in tag.get_text() for keyword in ["放送开始", "上映年度", "开始", "首播", "发售日"]
         ))
         if li_tag:
-            match = re.search(r'(\d{4}年\d{1,2}月\d{1,2}日)|(\d{4}年)', li_tag.get_text())
+            # 扩展正则表达式，匹配 YYYY-MM-DD、YYYY年M月D日、YYYY年 或 纯年份格式
+            match = re.search(r'(\d{4}-\d{2}-\d{2})|(\d{4}年\d{1,2}月\d{1,2}日)|(\d{4}年)|(\d{4})(?![-年])',
+                              li_tag.get_text())
             if match:
                 air_date = match.group(0)
 
@@ -86,17 +89,19 @@ for ranking, url in enumerate(subject_urls, start=1):
                 if match:
                     air_date = match.group(1)
 
-        # 将日期格式统一为“YYYY年M月D日”
+        # 统一日期格式为“YYYY年M月D日”，若仅为年份则显示“YYYY年”
         formatted_date = None
         if air_date:
             try:
-                if '年' in air_date:
-                    # 已经是“YYYY年M月D日”格式
-                    formatted_date = air_date
-                else:
+                if '-' in air_date:
                     # 将“YYYY-MM-DD”格式转换为“YYYY年M月D日”
                     date_obj = datetime.strptime(air_date, "%Y-%m-%d")
                     formatted_date = f"{date_obj.year}年{date_obj.month}月{date_obj.day}日"
+                elif len(air_date) == 4 and air_date.isdigit():
+                    # 如果只是4位年份
+                    formatted_date = f"{air_date}年"
+                else:
+                    formatted_date = air_date
             except ValueError as ve:
                 print(f"日期格式错误: {ve}")
                 formatted_date = air_date
@@ -111,14 +116,14 @@ for ranking, url in enumerate(subject_urls, start=1):
     except Exception as e:
         print(f"处理时发生错误: {e}")
 
-    # 延时 1 秒加上 0~1 秒之间的随机数，防止请求过快
+    # 延时1秒加上0~1秒之间的随机数，防止请求过快
     time.sleep(1 + random.random())
 
 # 将结果转换为 DataFrame 并输出
 df = pd.DataFrame(results)
 print(df)
 
-# 保存结果到 CSV 文件（如果存在则覆盖，可根据需要改为追加模式）
+# 保存结果到 CSV 文件（覆盖写入，可根据需要改为追加模式）
 output_file = "bangumi_ranking.csv"
 df.to_csv(output_file, index=False, encoding="utf-8-sig")
 print(f"数据已保存到 {output_file}")
