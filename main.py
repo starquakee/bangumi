@@ -15,7 +15,7 @@ headers = {
 }
 
 # 分页设置：设定要爬取的页数
-num_pages = 1  # 可根据需要调整页数
+num_pages = 380  # 可根据需要调整页数
 
 # 用于存储所有详情页链接，保持顺序
 all_subject_urls = []
@@ -63,7 +63,7 @@ for ranking, url in enumerate(subject_urls, start=1):
 
         # 方法1：查找包含关键词的 <li> 标签
         li_tag = subject_soup.find(lambda tag: tag.name == "li" and any(
-            keyword in tag.get_text() for keyword in ["放送开始", "上映年度", "开始", "首播"]
+            keyword in tag.get_text() for keyword in ["放送开始", "上映年度", "开始", "首播", "发售日"]
         ))
         if li_tag:
             match = re.search(r'(\d{4}年\d{1,2}月\d{1,2}日)|(\d{4}年)', li_tag.get_text())
