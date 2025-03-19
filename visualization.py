@@ -120,3 +120,19 @@ plt.xlabel('季度')
 plt.ylabel('上映年份')
 plt.title('每年各季度动画中位数排名')
 plt.show()
+
+# ---------------------- 图6：柱状图，展示1990年来每年前1000名的动画数量 ----------------------
+# 筛选出排名在前1000的动画
+df_top1000 = df_valid[df_valid['rank'] <= 1000]
+
+# 按年份统计前1000动画的数量
+yearly_top_count = df_top1000.groupby('year').size().reset_index(name='count')
+
+# 绘制柱状图
+plt.figure(figsize=(10, 6))
+plt.bar(yearly_top_count['year'], yearly_top_count['count'])
+plt.xlabel('上映年份')
+plt.ylabel('前1000名动画数量')
+plt.title('1990年来每年前1000名动画数量')
+plt.xticks(rotation=45)
+plt.show()
