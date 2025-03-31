@@ -13,7 +13,8 @@ bangumi/
 ├── scrape.py
 ├── visualization.py
 ├── README.md
-└── Figures
+└── Figures/
+    └── Figure_x.png
 ```
 
 ### 文件说明
@@ -25,27 +26,27 @@ bangumi/
 
 ### 图1：年份与作品排名散点图
 - 探索动画排名随年份的变化趋势。
-<img src="./Figure_1.png/" width="60%">
+<img src="./Figures/Figure_1.png/" width="60%">
 
 ### 图2：不同年份作品排名箱线图
 - 分析每年动画排名的分布情况，查看排名的集中性与离散程度。
-<img src="./Figure_2.png/" width="60%">
+<img src="./Figures/Figure_2.png/" width="60%">
 
 ### 图3：每年作品的平均排名柱状图
 - 展示不同年份动画的平均排名趋势。
-<img src="./Figure_3.png/" width="60%">
+<img src="./Figures/Figure_3.png/" width="60%">
 
 ### 图4：不同年份作品数量柱状图
 - 分析每年动画作品的发布数量。
-<img src="./Figure_4.png/" width="60%">
+<img src="./Figures/Figure_4.png/" width="60%">
 
 ### 图5：每年各季度动画的中位数排名热力图
 - 展示不同年份各季度的动画排名情况，发现季度间的差异。 
-<img src="./Figure_5.png/" width="60%">
+<img src="./Figures/Figure_5.png/" width="60%">
 
 ### 图6：1990年以来每年前1000名动画数量柱状图
 - 探索各年份高排名（前1000名）动画的数量变化。
-<img src="./Figure_6.png/" width="60%">
+<img src="./Figures/Figure_6.png/" width="60%">
 
 ## 环境配置
 

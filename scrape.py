@@ -124,6 +124,6 @@ df = pd.DataFrame(results)
 print(df)
 
 # 保存结果到 CSV 文件（覆盖写入，可根据需要改为追加模式）
-output_file = "data/bangumi_ranking.csv"
+output_file = "Data/bangumi_ranking.csv"
 df.to_csv(output_file, index=False, encoding="utf-8-sig")
 print(f"数据已保存到 {output_file}")

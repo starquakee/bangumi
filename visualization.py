@@ -8,7 +8,7 @@ sns.set_theme(context="notebook", style="whitegrid", font="Microsoft YaHei", fon
 plt.rcParams['axes.unicode_minus'] = False
 
 # ---------------------- 读取数据并提取年份 ----------------------
-df = pd.read_csv('data/bangumi_ranking.csv')
+df = pd.read_csv('Data/bangumi_ranking.csv')
 
 def extract_year(date_str):
     """从 air_date 中提取4位年份"""
